@@ -38,4 +38,33 @@ Implements an epsilon-greedy strategy for action selection (balancing exploratio
 Can perform three actions for each stock: buy, hold, or sell
 Uses experience replay (via ReplayBuffer) to store and learn from past trading decisions
 Includes both a policy network and a target network for stable learning
+
+
+## The reward consists of three components:
+
+### Portfolio Value Change (pvc):
+
+This is the percentage change in portfolio value from the previous step
+Calculated as: (new_value - prev_value) / prev_value
+
+
+### Volatility Penalty:
+
+Uses the standard deviation of the last 21 days of returns as a measure of volatility
+Multiplied by -0.1 to penalize high volatility
+This encourages more stable trading strategies
+
+
+### Risk-Adjusted Return (rar):
+
+This is similar to the Sharpe ratio, which measures return per unit of risk
+Calculated as: (return - risk_free_rate) / volatility
+Uses a daily risk-free rate of 0.02% (0.0002)
+Multiplied by 0.5 in the final reward
+
+
+
+### The final reward formula is:
+reward = portfolio_value_change - 0.1 * volatility + 0.5 * risk_adjusted_return
+
 ![image](https://github.com/user-attachments/assets/d75fe0c1-034f-43da-bf05-55b547e1084d)
